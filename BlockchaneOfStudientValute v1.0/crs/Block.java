@@ -1,14 +1,15 @@
 import java.util.Date;
 
 public class Block {
-    int Index, Hash, PrevHash;
+    String Hash, PrevHash;
+    int Index;
     String Key, data;
     Date date;
-    public Block(int prevHash, int index, Date date, String data, int hash, String key) {
+    public Block( int index, Date date, String prevHash, String data, String hash, String key) {
         this.PrevHash = PrevHash;
         this.Index = Index;
-        this.date = this.date;
-        this.data = this.data;
+        this.date = date;
+        this.data = data;
         this.Hash = Hash;
         this.Key = Key;
     }
