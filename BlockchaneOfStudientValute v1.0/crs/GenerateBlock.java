@@ -1,6 +1,8 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class GenerateBlock {
@@ -29,25 +31,36 @@ public class GenerateBlock {
             Key = Key + str[i];
         }
     }
-    public void GenBlock() throws NoSuchAlgorithmException {
-        String Hash , PrevHash = "";
+    void echo(Block block, Bank b1) throws IOException {
+        File file1 = new File(b1.log_name);
+        FileWriter fw1 = new FileWriter(file1, true);
+        fw1.write(block.Hash + " : Block " + block.Index + " : " + block.data + " | " + block.date + " | " + block.PrevHash + " + " + block.Key + "\n");
+        fw1.close();
+    }
+    public void GenBlock(int times, String filename, Bank b1, Bank b2, Bank b3, Bank b4) throws NoSuchAlgorithmException, IOException {
+        String Hash, PrevHash = "0";
         int Index = 1;
         String OurHashString;
-        String data = "1 transaction: NULL :: 7ae16e3ac9c3a7a6b08e96c8adf54035+; \n";
-        ArrayList<Block> Block = new ArrayList<>();
-        while (true) {
-            System.out.println("Generating block...\n");
+        File logs = new File(filename);
+        String data = "1 transaction: NULL :: 7ae16e3ac9c3a7a6b08e96c8adf54035+;";
+        while (times > 0) {
+            System.out.println(filename + " : " + times + "\n");
             RandomKey();
             Date date = new Date();
-            OurHashString = data + Key;
+            OurHashString = PrevHash + Index + data + Key;
             Hash = hash256(OurHashString);
-            if (Hash.contains("00000")) {
+
+            if (Hash.contains("000000")) {
                 Block newBlock = new Block( Index, date, PrevHash, data, Hash, Key);
-                System.out.println("Generated new block" + Index + " whit hash:" + Hash + "!\n");
-                Block.add(newBlock);
+                Index++;
+                PrevHash = Hash;
+                echo(newBlock, b1);
+                echo(newBlock, b2);
+                echo(newBlock, b3);
+                echo(newBlock, b4);
             }
-            Index++;
-            PrevHash = Hash;
+            times--;
         }
+
     }
 }
