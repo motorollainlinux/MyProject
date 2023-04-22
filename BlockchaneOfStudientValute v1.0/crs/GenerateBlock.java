@@ -44,12 +44,11 @@ public class GenerateBlock {
         File logs = new File(filename);
         String data = "1 transaction: NULL :: 7ae16e3ac9c3a7a6b08e96c8adf54035+;";
         while (times > 0) {
-            System.out.println(filename + " : " + times + "\n");
+            System.out.println(times + "\n");
             RandomKey();
             Date date = new Date();
-            OurHashString = PrevHash + Index + data + Key;
+            OurHashString = PrevHash + Index + date + data + Key;
             Hash = hash256(OurHashString);
-
             if (Hash.contains("000000")) {
                 Block newBlock = new Block( Index, date, PrevHash, data, Hash, Key);
                 Index++;
